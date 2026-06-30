@@ -12,7 +12,6 @@
 */
 
 #include "mpfr.h"
-#include <cmath>
 #include <concepts>
 #include <functional>
 #include <iostream>
@@ -92,16 +91,25 @@ public:
   template <num_no_apf T> friend bool operator==(const T &lhs, const apf &rhs);
   template <num_no_apf T> friend bool operator!=(const T &lhs, const apf &rhs);
 
+  static const apf approxThreshold;
+  template <num T>
+  static bool approxeq(const T &lhs, const T &rhs,
+                       const apf &threshold = approxThreshold);
+
   // functions
   static apf exp(const apf &);
   static apf log(const apf &);
   static apf log10(const apf &);
   static apf cos(const apf &);
+  static apf acos(const apf &);
   static apf sin(const apf &);
+  static apf atan2(const apf &, const apf &);
   static apf sqrt(const apf &);
   static apf abs(const apf &);
   static apf erf(const apf &);
   static apf normalCDF(const apf &);
+  static apf min(const apf &, const apf &);
+  static apf max(const apf &, const apf &);
   template <num T> static apf pow(const apf &base, const T &exponent);
 
   static double trim(const apf &);

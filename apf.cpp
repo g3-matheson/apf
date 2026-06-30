@@ -1,4 +1,5 @@
 #include "./apf.hpp"
+#include <cmath>
 #include <sstream>
 
 void apf::ResetPrecision() { Precision = DefaultPrecision; }
@@ -50,6 +51,11 @@ apf apf::operator-() const {
   return result;
 }
 
+const apf apf::approxThreshold = []() -> const apf {
+  apf x(std::format("1e-{}", apf::Precision / 2));
+  return x;
+}();
+
 apf apf::exp(const apf &x) {
   apf result;
   mpfr_exp(result.value, x.value, Rounding);
@@ -74,9 +80,21 @@ apf apf::cos(const apf &x) {
   return result;
 }
 
+apf apf::acos(const apf &x) {
+  apf result;
+  mpfr_acos(result.value, x.value, Rounding);
+  return result;
+}
+
 apf apf::sin(const apf &x) {
   apf result;
   mpfr_sin(result.value, x.value, Rounding);
+  return result;
+}
+
+apf apf::atan2(const apf &y, const apf &x) {
+  apf result;
+  mpfr_atan2(result.value, y.value, x.value, Rounding);
   return result;
 }
 
@@ -102,6 +120,18 @@ apf apf::erf(const apf &x) {
 
 apf apf::normalCDF(const apf &x) {
   return (1 + apf::erf(x / apf::sqrt(2))) / 2;
+}
+
+apf apf::min(const apf &x, const apf &y) {
+  apf result;
+  mpfr_min(result.value, x.value, y.value, Rounding);
+  return result;
+}
+
+apf apf::max(const apf &x, const apf &y) {
+  apf result;
+  mpfr_max(result.value, x.value, y.value, Rounding);
+  return result;
 }
 
 double apf::trim(const apf &x) { return mpfr_get_d(x.value, Rounding); }

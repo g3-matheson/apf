@@ -203,6 +203,12 @@ template <num_no_apf T> bool operator!=(const T &lhs, const apf &rhs) {
   return apf(lhs) != rhs;
 }
 
+template <num T>
+bool apf::approxeq(const T &lhs, const T &rhs, const apf &threshold) {
+  apf l{lhs}, r{rhs};
+  return apf::abs(lhs - rhs) < threshold;
+}
+
 template <num T> apf apf::pow(const apf &base, const T &exponent) {
   apf result;
   if constexpr (std::is_same_v<T, apf>)
